@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include("includes/header.html");
 
 if ($_SERVER["REQUEST_URI"] == "/authorization") {
