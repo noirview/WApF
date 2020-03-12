@@ -3,15 +3,26 @@ class DB
 {
     var $db;
 
-    function addUser($login, $name, $password) {
+    function addUser($login, $name, $password, $email)
+    {
         $usersTable = $this->db->Users;
-
         $newUser = $usersTable->addChild('User');
-        $newUser->addChild('login', $login);
+
         $newUser->addChild('name', $name);
+        $newUser->addChild('email', $email);
+        $newUser->addChild('login', $login);
         $newUser->addChild('password', $password);
 
         $this->db->asXML('DataBase.xml');
+    }
+
+    function checkUnique($nameTable, $nameField, $value)
+    {
+        foreach ($this->db->{$nameTable}->children() as $element) {
+            if ($element->{$nameField} == $value) { return false; }
+        }
+
+        return True;
     }
 
     function DB()
