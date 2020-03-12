@@ -1,13 +1,10 @@
 <?php
+require_once("db.php");
+
 $fd = fopen("hello.txt", 'w') or die("не удалось создать файл");
 
-fwrite($fd, $_POST['login'] . "\n");
-fwrite($fd, $_POST['password'] . "\n");
-
-if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/registration"){
-    fwrite($fd, $_POST['confirm_password'] . "\n");
-    fwrite($fd, $_POST['name'] . "\n");
-    fwrite($fd, $_POST['email'] . "\n");
+if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/registration" || '/'){
+    $DB->addUser($_POST['login'], $_POST['name'], $_POST['password']);
 }
 
 fclose($fd);
