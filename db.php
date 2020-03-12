@@ -16,10 +16,24 @@ class DB
         $this->db->asXML('DataBase.xml');
     }
 
+    function checkUser($login, $password)
+    {
+        foreach ($this->db->Users->children() as $User) {
+            if ($User->login != $login) { continue; } 
+            
+            if ($User->password != $password) { return False; }
+            else { return True; }
+        }
+
+        return False;
+    }
+
     function checkUnique($nameTable, $nameField, $value)
     {
         foreach ($this->db->{$nameTable}->children() as $element) {
-            if ($element->{$nameField} == $value) { return false; }
+            if ($element->{$nameField} == $value) {
+                return false;
+            }
         }
 
         return True;
