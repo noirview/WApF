@@ -3,7 +3,9 @@ class DB
 {
     var $db;
 
-    static $userId = 1;
+    static 
+        $salt = '5hr8Uh32Hr',
+        $userId = 1;
 
     function addUser($login, $name, $password, $email)
     {
@@ -16,7 +18,7 @@ class DB
         $newUser->addChild('name', $name);
         $newUser->addChild('email', $email);
         $newUser->addChild('login', $login);
-        $newUser->addChild('password', $password);
+        $newUser->addChild('password', md5($password . self::$salt));
 
         $hash = md5($login . $email . $name);
 
@@ -49,7 +51,7 @@ class DB
         foreach ($this->db->Users->children() as $User) {
             if ($User->login != $login) { continue; } 
             
-            if ($User->password != $password) { return false; }
+            if ($User->password != md5($password . self::$salt)) { return false; }
             else { return true; }
         }
 
