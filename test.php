@@ -1,18 +1,33 @@
 <?php
+
+session_start();
+
 require("db.php");
+require("cookie_session_db.php");
 
 if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/registration") {
-    echo parse_url($_SERVER['HTTP_REFERER'])['path'];
+    $error_message = registration($_POST);
+    
     $response = array(
-        'error' => registration($_POST)
+        'error' => $error_message
     );
-} elseif (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/authorization") {
-    $response = array(
-        'error' => authorization($_POST)
-    );
-}
 
-echo json_encode($response);
+    echo json_encode($response);
+
+} else if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/authorization") {
+    $error_message = authorization($_POST);
+    
+    $response = array(
+        'error' => $error_message
+    );
+
+    echo json_encode($response);
+    
+} else if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/user_page") {
+    session_destroy();
+    setcookie("hash", '', time());
+    setcookie("id", '', time());
+}
 
 function registration($formData)
 {
@@ -23,7 +38,6 @@ function registration($formData)
         !isset($formData['password']) &&
         !isset($formData['confirm_password'])
     ) {
-
         return "Заполните пустые поля";
     }
 
@@ -41,7 +55,8 @@ function registration($formData)
         return "Данный email уже используется";
     }
 
-    $DB->addUser($_POST['login'], $_POST['name'], $_POST['password'], $_POST['email']);
+    $sessionId = $DB->addUser($_POST['login'], $_POST['name'], $_POST['password'], $_POST['email']);
+    $_SESSION['id'] = $sessionId;
 
     return '';
 }
@@ -61,6 +76,16 @@ function authorization($formData)
     if (!$DB->checkUser($formData['login'], $formData['password'])) {
         return 'Неверный логин или пароль';
     }
+
+    $userId = $DB->getUserId($formData['login']);
+    $name = $DB->getUserName($userId);
+    $hash = (string)$DB->getAuthHash($userId);
+
+    $_SESSION['name'] = (string)$name;
+    $_SESSION['id'] = $hash;
+
+    setcookie("id", $userId, time() + 60 * 60 * 24 * 30);
+    setcookie("hash", $_SESSION['id'], time() + 60 * 60 * 24 * 30);
 
     return '';
 }

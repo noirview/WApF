@@ -1,4 +1,4 @@
-$("form").on('click', '.btn', function (){
+$('.form-inner').on('click', '.btn', function (){
     $.ajax({
         type : 'POST',
         url : 'test.php',

@@ -95,7 +95,8 @@ body {
     font-family  : 'Roboto', sans-serif;
 }
 
-.form-inner input[type="button"] {
+.form-inner input[type="button"],
+.form-inner input[type="submit"] {
     margin-top   : 30px;
     background   : #f69a73;
     border-bottom: 4px solid #d87d56;

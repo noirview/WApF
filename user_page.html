@@ -3,9 +3,9 @@
     <div class="form-right-decoration"></div>
     <div class="circle"></div>
     <div class="form-inner">
-        <h1>Привет, {Имя}</h1>
+        <h1>Привет, <?= $_SESSION['name']?></h1>
         <p>Здесь пока ничего нет...</p>
         <p>¯\_(ツ)_/¯</p>
-        <input type="submit" value="Выйти">
+        <input type="button" class='btn' value="Выйти">
     </div>
 </div>
