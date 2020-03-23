@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_URI"] == "/authorization") {
 } else if ($_SERVER["REQUEST_URI"] == "/user_page" && isset($_SESSION['name'])) {
     include("user_page.html");
 } else {
-    header("Location: /registration");
+    include("registration.html");
 }
 
 include("includes/footer.html");

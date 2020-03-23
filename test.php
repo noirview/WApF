@@ -3,7 +3,6 @@
 session_start();
 
 require("db.php");
-require("cookie_session_db.php");
 
 if (parse_url($_SERVER['HTTP_REFERER'])['path'] == "/registration") {
     $error_message = registration($_POST);
